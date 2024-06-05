@@ -4,8 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -14,14 +13,18 @@ export default function SignUp() {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
-        email,
-        password
+        formData.email,
+        formData.password
       );
-      localStorage.setItem("user", JSON.stringify(userCredential.user));
+      const user = userCredential.user;
+      console.log(user);
+      localStorage.setItem("user", JSON.stringify(user));
       navigate("/layout/home");
     } catch (error) {
       setError(error.message);
     }
+
+    setFormData({ email: "", password: "" });
   };
 
   return (
@@ -34,8 +37,11 @@ export default function SignUp() {
           <input
             type="email"
             className="w-full px-3 py-2 border rounded"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={formData.email}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, email: e.target.value }))
+            }
+            required
           />
         </div>
         <div className="mb-4">
@@ -43,8 +49,11 @@ export default function SignUp() {
           <input
             type="password"
             className="w-full px-3 py-2 border rounded"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={formData.password}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, password: e.target.value }))
+            }
+            required
           />
         </div>
         <button
