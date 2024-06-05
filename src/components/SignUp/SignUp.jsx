@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { auth } from "../../farebase/Farebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -62,6 +62,13 @@ export default function SignUp() {
         >
           Register
         </button>
+
+        <p className=" text-black py-2 ">
+          You have already registered?{" "}
+          <Link className="text-[blue] " to="/login">
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );
